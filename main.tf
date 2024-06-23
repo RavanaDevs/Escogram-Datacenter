@@ -1,10 +1,11 @@
 provider "aws" {
-  region = "ap-southeast-1" # Specify the desired AWS region
+  region = var.region
 }
 
 module "vpc" {
   source   = "./vpc"
-  vpc_name = "rd-vpc"
+  vpc_name = var.vpc_name
+  vpc_cidr = var.vpc_cidr
 }
 
 module "internet_gateway" {
@@ -82,7 +83,7 @@ module "public_ec2_a" {
   instance_type  = "t2.micro"
   subnet_id      = module.public_subnet_a.subnet_id
   security_group = module.public_sg.sg_id
-  key_name       = "my-server-keys"
+  key_name       = var.ssh_key
   user_data      = file("scripts/setup-nginx.sh")
 }
 
